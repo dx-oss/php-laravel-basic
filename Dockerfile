@@ -36,7 +36,7 @@ RUN if [ ! -e ".env" ]; then cp .env.example .env ; fi
 RUN if [ ! -e "composer.lock" ]; then composer update ; fi
 RUN composer install
 RUN if [ -e ".env" ]; then rm .env ; fi
-ADD docker/scripts/entrypoint.sh  ./
+ADD entrypoint.sh  ./
 RUN chmod +x entrypoint.sh
 RUN sed -i -s "s/0.0.0/${DOCKER_IMAGE_VERSION}/gi" .env.example
 RUN echo "${DOCKER_IMAGE_VERSION}" > version.txt
