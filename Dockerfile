@@ -4,17 +4,18 @@ ARG DOCKER_IMAGE_VERSION=0.0.0
 ARG SSH_PRIVATE_KEY
 ARG BUILD_DEBUG=0
 
-# Prepare ssh for composer
-RUN if [ "${BUILD_DEBUG}" = "1" ]; then env ; fi
-RUN if [ "${SSH_PRIVATE_KEY}" = "" ]; then echo "SSH_PRIVATE_KEY build-arg is required" && exit 1 ; fi
-#RUN apt-get update && apt-get install -y unzip ssh git ca-certificates && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh
-RUN ssht sshkey --private-file=/root/.ssh/id_rsa --overwrite
-RUN chmod 600 /root/.ssh/id_rsa
-RUN if [ `grep -c ENCRYPTED /root/.ssh/id_rsa` = 1 ]; then echo "The SSH key cannot have password" && exit 1 ; fi
-RUN touch /root/.ssh/known_hosts
-RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
-RUN if [ "${BUILD_DEBUG}" = "1" ]; then cat /root/.ssh/id_rsa ; fi
+# Uncomment this if using private composer packages
+## Prepare ssh for composer
+#RUN if [ "${BUILD_DEBUG}" = "1" ]; then env ; fi
+#RUN if [ "${SSH_PRIVATE_KEY}" = "" ]; then echo "SSH_PRIVATE_KEY build-arg is required" && exit 1 ; fi
+##RUN apt-get update && apt-get install -y unzip ssh git ca-certificates && rm -rf /var/lib/apt/lists/*
+#RUN mkdir -p /root/.ssh
+#RUN ssht sshkey --private-file=/root/.ssh/id_rsa --overwrite
+#RUN chmod 600 /root/.ssh/id_rsa
+#RUN if [ `grep -c ENCRYPTED /root/.ssh/id_rsa` = 1 ]; then echo "The SSH key cannot have password" && exit 1 ; fi
+#RUN touch /root/.ssh/known_hosts
+#RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+#RUN if [ "${BUILD_DEBUG}" = "1" ]; then cat /root/.ssh/id_rsa ; fi
 
 # Composer
 COPY src/. /app/
