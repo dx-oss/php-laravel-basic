@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION:-0.0.0}
+TAG=${TAG:-php-laravel-basic}
+
+BUILD_CACHE="--no-cache"
+BUILD_CACHE=${DOCKER_BUILD_CACHE-$BUILD_CACHE}
+
+SSH_PRIVATE_KEY_FILE=${SSH_PRIVATE_KEY_FILE:=~/.ssh/id_rsa}
+SSH_PRIVATE_KEY=`cat $SSH_PRIVATE_KEY_FILE`
+echo "Uses: [$SSH_PRIVATE_KEY_FILE] as ssh private key (SSH_PRIVATE_KEY_FILE)"
+
+echo "Cache: $BUILD_CACHE"
+
+docker build $BUILD_CACHE --build-arg "DOCKER_IMAGE_VERSION=$DOCKER_IMAGE_VERSION" --build-arg "SSH_PRIVATE_KEY=$SSH_PRIVATE_KEY" --build-arg "BUILD_DEBUG=1" -t $TAG $* .
